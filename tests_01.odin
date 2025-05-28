@@ -57,33 +57,33 @@ init_lru_cache :: proc(capacity: int) -> LRUCache {
 get_lru :: proc(lru: ^LRUCache, key: int) -> int {
     if key in lru.cache {
         // Move the key to the end (mark as "recently used")
-		p_list.remove(&lru.order, key)
+	p_list.remove(&lru.order, key)
         append(&lru.order, key)
         
-		return lru.cache[key]
+	return lru.cache[key]
     }
     return -1  // Not found
 }
 
 put_lru :: proc(lru: ^LRUCache, key: int, value: int) {
 	if key in lru.cache {
-		// update value
-		lru.cache[key] = value 
+	    // update value
+	    lru.cache[key] = value 
 		
-		// mark as recently used	
-		p_list.remove(&lru.order, key)
-        append(&lru.order, key)
+	    // mark as recently used	
+	    p_list.remove(&lru.order, key)
+            append(&lru.order, key)
 	}
 	
 	if key not_in lru.cache {
-		lru.cache[key] = value  // update value
-        append(&lru.order, key) // mark as recently used
+	    lru.cache[key] = value  // update value
+            append(&lru.order, key) // mark as recently used
 	}
 	
 	// remove the first value if the length is greater than the capacity
 	if len(lru.order) > lru.capacity {
-		temp_val := lru.order[0]
-		p_list.remove(&lru.order, temp_val)
-		delete_key(&lru.cache, temp_val)
+	    temp_val := lru.order[0]
+	    p_list.remove(&lru.order, temp_val)
+	    delete_key(&lru.cache, temp_val)
 	}
 }
